@@ -1,7 +1,8 @@
 {
   "dependencies": [
-    "rtaudio",
+    "libsndfile",
     "portaudio",
-    "libsndfile"
+    "rtaudio",
+    "fftw3"
   ]
 }
