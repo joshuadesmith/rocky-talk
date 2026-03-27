@@ -7,7 +7,7 @@
 
 #include "../include/rockytalk/file.hpp"
 
-double* ingestAudioFile(const char filePath[]) {
+void ingestAudioFile(const char filePath[], AudioFileData* file_data_output) {
     SF_INFO info = {};
 
     SNDFILE* sf = sf_open(filePath, SFM_READ, &info);
@@ -18,19 +18,23 @@ double* ingestAudioFile(const char filePath[]) {
         exit(0);
     }
 
-    printf("Frames: %lld, Sample rate: %d, Channels: %d\n", info.frames, info.samplerate, info.channels);
+    printf("Frames: %lld, Sample rate: %d, Channels: %d\n...\n", info.frames, info.samplerate, info.channels);
 
-    const auto buffer = new double[info.frames * info.channels];
+    const unsigned int size = info.frames * info.channels;
+    const auto buffer = new double[size];
+    file_data_output->data = new double[size];
+    file_data_output->size = size;
 
-    int readCount;
-    while (( readCount = static_cast<int>(sf_readf_double(sf, buffer, info.frames))) > 0) {
-        for (int k = 0; k < readCount; k++) {
-            for (int m = 0; m < info.channels; m++) {
-                printf("%12.10f\n", buffer[k * info.channels + m]);
-            }
+    int read_cnt;
+    int total_read_count = 0;
+    while ((read_cnt = static_cast<int>(sf_readf_double(sf, buffer, info.frames))) > 0) {
+        total_read_count += read_cnt;
+        // copy buffer into output
+        for (unsigned int i = 0; i < read_cnt; ++i) {
+            file_data_output->data[i] = buffer[i];
         }
     }
-
+    std::cout << "Total read count: " << total_read_count << std::endl;
+    std::cout << "..." << std::endl;
     sf_close(sf);
-    return buffer;
 }

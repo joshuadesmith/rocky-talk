@@ -14,7 +14,12 @@ file(GLOB ALL_FILES
 find_package(RtAudio CONFIG REQUIRED)
 find_package(PortAudio CONFIG REQUIRED)
 find_package(SndFile CONFIG REQUIRED)
+find_package(FFTW3 CONFIG REQUIRED)
 
 add_executable(rocky_talk ${ALL_FILES})
 
-target_link_libraries(rocky_talk PRIVATE RtAudio::rtaudio portaudio SndFile::sndfile)
+target_link_libraries(rocky_talk PRIVATE
+        RtAudio::rtaudio
+        portaudio
+        SndFile::sndfile
+        FFTW3::fftw3)

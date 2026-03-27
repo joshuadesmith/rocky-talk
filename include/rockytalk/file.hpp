@@ -5,6 +5,11 @@
 #ifndef ROCKY_TALK_FILE_HPP
 #define ROCKY_TALK_FILE_HPP
 
-double* ingestAudioFile(const char filePath[]);
+struct AudioFileData {
+    double* data;
+    unsigned int size;
+};
+
+void ingestAudioFile(const char filePath[], AudioFileData* file_data_output);
 
 #endif //ROCKY_TALK_FILE_HPP
